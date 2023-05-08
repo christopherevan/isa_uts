@@ -75,7 +75,7 @@
                 Profile
             </div>
             <li class="nav-item">
-                <a class="nav-link" href="#" >
+                <a class="nav-link" href="user_profile.php" >
                     <i class="fas fa-fw fa-folder"></i>
                     <span>My Account</span>
                 </a>
