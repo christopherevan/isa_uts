@@ -280,8 +280,34 @@
 
                 <!-- KONTEN DISINIIIII -->
 
-
-
+                    <div class="row">
+                        <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                        <div class="col-lg-6">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h1 class="h4 text-gray-900 mb-4">Send Money</h1>
+                                </div>
+                                <form class="user" method="post" action=".php">
+                                    <div class="form-group">
+                                        <label>Send To</label>
+                                        <!-- <select name="accNumber" class="form-control" id="accNumber" required>
+                                            <option>aaaaa</option>
+                                        </select> -->
+                                        <input type="text" class="form-control form-control-user" name="accNumber"
+                                            id="accNumber" placeholder="Insert Account Number" maxlength="9" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Money Amount</label>
+                                        <input type="number" class="form-control form-control-user" name="amount"
+                                            id="moneyAmount" placeholder="Insert Amount" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-user btn-block">
+                                        Send
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- /.container-fluid -->
 
