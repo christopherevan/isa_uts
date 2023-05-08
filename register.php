@@ -34,44 +34,65 @@
                     <div class="col-lg-7">
                         <div class="p-5">
                             <div class="text-center">
+                                <?php
+                                if (isset($_GET['err'])) {
+                                    if ($_GET['err'] == 1) {
+                                        echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <strong>Oops!</strong> Username you entered is already taken! Please enter another username.
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>';
+                                    }
+                                }
+
+                                if (isset($_GET['success'])) {
+                                    if ($_GET['success'] == 1) {
+                                        echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <strong>Create Account Success!</strong> Please <a href="login.php">login</a> to continue.
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>';
+                                    }
+                                }
+                                ?>
                                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
                             </div>
                             <form class="user" method="post" action="register_process.php">
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user" id="exampleFirstName"
-                                            placeholder="First Name" required>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control form-control-user" id="exampleLastName"
-                                            placeholder="Last Name" required>
-                                    </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-user" id="exampleInputEmail"
+                                        placeholder="Name" name="name" required>
                                 </div>
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control-user" id="exampleInputEmail"
-                                        placeholder="Username" required>
+                                        placeholder="Username" name="username" required>
                                 </div>
                                 <div class="form-group">
                                     <input type="email" class="form-control form-control-user" id="exampleInputEmail"
-                                        placeholder="Email Address" required>
+                                        placeholder="Email Address" name="email" required>
                                 </div>
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control-user" id="exampleInputEmail"
-                                        placeholder="Home Address" required>
+                                        placeholder="Home Address" name="address" required>
                                 </div>
                                 <div class="form-group">
                                     <input type="tel" class="form-control form-control-user" id="exampleInputEmail"
-                                        placeholder="Telephone No" required>
+                                        placeholder="Telephone No" name="tel" required>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="password" class="form-control form-control-user"
-                                            id="exampleInputPassword" placeholder="Password" required>
+                                            id="exampleInputPassword" placeholder="Password" name="pass" required>
                                     </div>
                                     <div class="col-sm-6">
                                         <input type="password" class="form-control form-control-user"
-                                            id="exampleRepeatPassword" placeholder="Repeat Password" required>
+                                            id="exampleRepeatPassword" placeholder="Repeat Password" name="passRe" required>
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-user" id="exampleInputEmail"
+                                        placeholder="PIN (6-digit numeric)" name="pin" pattern="[0-9]{1,6}" required>
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-user btn-block">
                                     Register Account

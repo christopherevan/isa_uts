@@ -71,7 +71,7 @@ if (isset($_SESSION['user'])) {
                                     </form>
                                     <hr>
                                     <div class="text-center">
-                                        <a class="small" href="register.html">Create an Account!</a>
+                                        <a class="small" href="register.php">Create an Account!</a>
                                     </div>
                                 </div>
                             </div>
