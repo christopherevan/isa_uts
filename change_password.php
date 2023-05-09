@@ -6,25 +6,25 @@ session_start();
 $aes = new AES();
 $conn = new conn();
 
-$enc_user = $aes->encrypt($_SESSION['username']);
-$sql = "SELECT u.*, c.*, a.* FROM users as u INNER JOIN customers as c ON u.username=c.username 
-INNER JOIN accounts as a ON c.customer_id=a.customer_id WHERE u.username=?";
-$stmt = $conn->mysqli->prepare($sql);
-$stmt->bind_param('s', $enc_user);
-$stmt->execute();
-$res = $stmt->get_result();
+// $enc_user = $aes->encrypt($_SESSION['username']);
+// $sql = "SELECT u.*, c.*, a.* FROM users as u INNER JOIN customers as c ON u.username=c.username 
+// INNER JOIN accounts as a ON c.customer_id=a.customer_id WHERE u.username=?";
+// $stmt = $conn->mysqli->prepare($sql);
+// $stmt->bind_param('s', $enc_user);
+// $stmt->execute();
+// $res = $stmt->get_result();
 
-if ($row = $res->fetch_assoc()){
-    $user = array($row['name'], $row['email'], $row['phone_number'],  $row['address'], $row['account_id']);
-    $user_arr = array('name', 'email', 'tel', 'address', 'accountnum');
-    $dec_user = array();
-}
+// if ($row = $res->fetch_assoc()){
+//     $user = array($row['name'], $row['email'], $row['phone_number'],  $row['address'], $row['account_id']);
+//     $user_arr = array('name', 'email', 'tel', 'address', 'accountnum');
+//     $dec_user = array();
+// }
 
-$i = 0;
-foreach ($user as $u) {
-    $dec_user[$user_arr[$i]] = $aes->decrypt($u);
-    $i++;
-}
+// $i = 0;
+// foreach ($user as $u) {
+//     $dec_user[$user_arr[$i]] = $aes->decrypt($u);
+//     $i++;
+// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -311,85 +311,51 @@ foreach ($user as $u) {
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">My Account</h1>
-                        <button type="submit" class="btn btn-primary btn-user" onclick="window.location.replace('edit_profile.php')">
-                            <i class="fas fa-user-edit text-white mx-1"></i>               
-                            Edit Profile 
-                        </button>
+                        
                     </div>
 
                     <!-- Content Row -->
+                    <form method="post" action="profile_process.php">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <?php
-                            if (isset($_GET['success'])) {
-                                if ($_GET['success'] == 1) {
-                                    echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    <strong>Edit Successful!</strong> Your profile has been updated.
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                    </div>';
-                                }
-                            }
-                            ?>
-
                             <div class="row">
                             <div class="col-sm-3">
-                                <p class="mb-0">Full Name</p>
+                                <p class="mb-0">Old Password</p>
                             </div>
                             <div class="col-sm-9">
-                                <p class="text-muted mb-0"><?php echo $dec_user['name'];?></p>
+                                <input type="password" class="form-control form-control-user"
+                                        placeholder="Enter Old Password" name="passOld" required>
                             </div>
                             </div>
                             <hr>
                             <div class="row">
                             <div class="col-sm-3">
-                                <p class="mb-0">Email</p>
+                                <p class="mb-0">New Password</p>
                             </div>
                             <div class="col-sm-9">
-                                <p class="text-muted mb-0"><?php echo $dec_user['email'];?></p>
+                                
+                                <input type="password" class="form-control form-control-user"
+                                        placeholder="Enter New Password" name="passNew" required>
                             </div>
                             </div>
                             <hr>
                             <div class="row">
                             <div class="col-sm-3">
-                                <p class="mb-0">Phone</p>
+                                <p class="mb-0">Repeat New Password</p>
                             </div>
                             <div class="col-sm-9">
-                                <p class="text-muted mb-0"><?php echo $dec_user['tel'];?></p>
-                            </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Address</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0"><?php echo $dec_user['address'];?></p>
-                            </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Account Number</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0"><?php echo $dec_user['accountnum'];?></p>
-                            </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Password</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <button type="button" class="btn btn-danger btn-user" onclick="window.location.replace('change_password.php')">
-                                    Change Password
-                                </button>
+                                <input type="password" class="form-control form-control-user"
+                                        placeholder="Repeat New Password" name="passNewRe" required>
                             </div>
                             </div>
                         </div>
-                </div>
+                        
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-user btn-block">               
+                                Save Profile 
+                    </button>
+
+                </form>
                 <!-- /.container-fluid -->
 
             </div>
