@@ -287,8 +287,32 @@
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Send Money</h1>
                                 </div>
-                                <form class="user" method="post" action="transfer_process.php">
+                                <!-- <form class="user" method="post" action="transfer_process.php"> -->
                                     <div class="form-group">
+                                        <?php
+                                        if (isset($_GET['err'])) {
+                                            if ($_GET['err'] == 1) {
+                                                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                <strong>Oops!</strong> Balance is insufficient! Please top up your balance.
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                </div>';
+                                            }
+                                        }
+
+                                        if (isset($_GET['success'])) {
+                                            if ($_GET['success'] == 1) {
+                                                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                <strong>Transfer Successful!</strong> Fund has been transferred successfully.
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                </div>';
+                                            }
+                                        }
+                                        
+                                        ?>
                                         <label>Send To</label>
                                         <!-- <select name="accNumber" class="form-control" id="accNumber" required>
                                             <option>aaaaa</option>
@@ -306,7 +330,7 @@
                                     <button type="submit" class="btn btn-primary btn-user btn-block" id="btnSend"  data-toggle="modal" data-target="#modalSubscriptionForm" disabled>
                                         Send
                                     </button>
-                                </form>
+                                <!-- </form> -->
                             </div>
                         </div>
                     </div>
@@ -326,10 +350,11 @@
                             <div class="md-form">
                             <input type="password" class="form-control form-control-user" name="pin"
                                                 id="pin" placeholder="PIN (6-digit numeric)" pattern="[0-9]{6}" maxlength="6" required>
+                            <div id="modalWarning"></div>
                             </div>
                         </div>
                         <div class="modal-footer d-flex justify-content-center">
-                        <button type="submit" class="btn btn-primary btn-user btn-block">Confirm</button>
+                        <button id="btnConfirmPin" class="btn btn-primary btn-user btn-block">Confirm</button>
                         </div>
                         </div>
                     </div>
@@ -377,6 +402,42 @@
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
     <script>
+        var accdone = false;
+        var amountdone = false;
+
+        function cekFields() {
+            if (accdone && amountdone) {
+                $("#btnSend").prop('disabled', false);
+            } else {
+                $("#btnSend").prop('disabled', true);
+            }
+            console.log(accdone);
+            console.log(amountdone);
+            console.log("---------");
+        }
+
+        $('#btnConfirmPin').on('click', function(){
+            var pin = $("#pin").val();
+            var accId = $("#accNumber").val();
+            var amount = $("#moneyAmount").val();
+
+            $.post('cek_pin.php',
+                {   
+                    'acc_id' : accId,
+                    'pin' : pin,
+                    'amount': amount
+                },
+                function(data) {
+                    if (data == 'false') {
+                        $("#modalWarning").html("<div class='alert alert-danger mt-3 mb-0' role='alert'>Wrong PIN. Please try again</div>");
+                    } else if (data == 'true') {
+                        window.location.replace("transfer.php?success=1");
+                    }
+                }
+            );
+            
+        });
+
         $('#accNumber').on('keyup', function(){
             var myLength = $("#accNumber").val().length;
             if (myLength == 16) {
@@ -386,21 +447,63 @@
                     function(data) {
                         if (data == 'false') {
                             $("#alertAcc").html("<div class='alert alert-danger my-3' role='alert'>Destination Account Number Not Found</div>");
-                            $("#btnSend").prop('disabled', true);
+                            accdone = false;
+                            cekFields();
                         } else {
                             $("#alertAcc").html("<div class='alert alert-success my-3' role='alert'> Destination Account Found: " + data + "</div>");
-                            $("#btnSend").prop('disabled', false);
+                            accdone = true;
+                            cekFields();
                         }
                     }
                 );
             } 
             else if (myLength < 16) {
-                $("#btnSend").prop('disabled', true);
+                accdone = false;
+                cekFields();
             }
-            else if (myLength > 16) {
-                $("#btnSend").prop('disabled', true);
-            }
+            // else if (myLength > 16) {
+            //     accdone = false;
+            //     cekFields();
+            // }
         });
+
+        $('#moneyAmount').on('keyup', function(){
+            var myVal = $("#moneyAmount").val();
+            if (myVal >0) {
+                amountdone = true;
+                cekFields();
+            } 
+            else{
+                amountdone=false;
+                cekFields();
+            }
+
+        });
+
+        // $('#pin').on('keyup', function(){
+        //     var myLength = $("#pin").val().length;
+        //     if (myLength == 6) {
+        //         var num = $('#pin').val();
+        //         $.post('cek_account.php',
+        //             {'acc_id' : num},
+        //             function(data) {
+        //                 if (data == 'false') {
+        //                     $("#modalWarning").html("<div class='alert alert-danger my-3' role='alert'>Destination Account Number Not Found</div>");
+        //                     $("#btnSend").prop('disabled', true);
+        //                 } else {
+        //                     $("#modalWarning").html("<div class='alert alert-success my-3' role='alert'> Destination Account Found: " + data + "</div>");
+        //                     $("#btnSend").prop('disabled', false);
+        //                 }
+        //             }
+        //         );
+        //     } 
+        //     else if (myLength < 16) {
+        //         $("#btnSend").prop('disabled', true);
+        //     }
+        //     else if (myLength > 16) {
+        //         $("#btnSend").prop('disabled', true);
+        //     }
+        // });
     </script>
 </body>
 

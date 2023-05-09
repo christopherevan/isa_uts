@@ -101,9 +101,9 @@ while ($unique == false) {
 }
 
 $encrypted_cid = $aes->encrypt($cid);
-$sql2 = 'INSERT INTO customers VALUES(?,?,?,?,?,?,?)';
+$sql2 = 'INSERT INTO customers VALUES(?,?,?,?,?,?)';
 $stmt2 = $conn->mysqli->prepare($sql2);
-$stmt2->bind_param('sssssss', $encrypted_cid, $enc_user['name'], $enc_user['address'], $enc_user['tel'], $enc_user['email'], $enc_user['pin'], $enc_user['username']);
+$stmt2->bind_param('ssssss', $encrypted_cid, $enc_user['name'], $enc_user['address'], $enc_user['tel'], $enc_user['email'], $enc_user['username']);
 $stmt2->execute();
 
 while ($unique_acc == false) {
@@ -113,9 +113,9 @@ while ($unique_acc == false) {
 
 $bal = 0;
 $encrypted_aid = $aes->encrypt($aid);
-$sql3 = 'INSERT INTO accounts VALUES(?,?,?)';
+$sql3 = 'INSERT INTO accounts VALUES(?,?,?,?)';
 $stmt3 = $conn->mysqli->prepare($sql3);
-$stmt3->bind_param('sis', $encrypted_aid, $bal, $encrypted_cid);
+$stmt3->bind_param('siss', $encrypted_aid, $bal, $encrypted_cid, $enc_user['pin']);
 $stmt3->execute();
 
 $conn->mysqli->close();
