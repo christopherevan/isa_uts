@@ -1,5 +1,24 @@
 <?php
+require_once('./class/encrypt.php');
+require_once('./class/conn.php');
 session_start();
+
+$aes = new AES();
+$conn = new conn();
+
+$enc_user = $aes->encrypt($_SESSION['username']);
+$sql = "SELECT u.*, c.*, a.* FROM users as u INNER JOIN customers as c ON u.username=c.username 
+INNER JOIN accounts as a ON c.customer_id=a.customer_id WHERE u.username=?";
+$stmt = $conn->mysqli->prepare($sql);
+$stmt->bind_param('s', $enc_user);
+$stmt->execute();
+$res = $stmt->get_result();
+
+while ($row = $res->fetch_assoc()){
+    $bal = $row['balance'];
+    $rupiah = number_format($bal,0,',','.');
+    $bal = 'Rp'.$rupiah;
+}
 ?>
 
 <!DOCTYPE html>
@@ -300,7 +319,7 @@ session_start();
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Current Balance</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp327.790.050</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $bal;?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
