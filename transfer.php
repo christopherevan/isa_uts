@@ -19,7 +19,7 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body id="page-top">
@@ -287,21 +287,23 @@
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Send Money</h1>
                                 </div>
-                                <form class="user" method="post" action=".php">
+                                <form class="user" method="post" action="transfer_process.php">
                                     <div class="form-group">
                                         <label>Send To</label>
                                         <!-- <select name="accNumber" class="form-control" id="accNumber" required>
                                             <option>aaaaa</option>
                                         </select> -->
                                         <input type="text" class="form-control form-control-user" name="accNumber"
-                                            id="accNumber" placeholder="Insert Account Number" maxlength="9" required>
+                                            id="accNumber" placeholder="Insert Account Number" maxlength="16" required>
+
+                                        <div id="alertAcc"></div>
                                     </div>
                                     <div class="form-group">
                                         <label>Money Amount</label>
                                         <input type="number" class="form-control form-control-user" name="amount"
-                                            id="moneyAmount" placeholder="Insert Amount" required>
+                                            id="moneyAmount" placeholder="Insert Amount" min="1" required>
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-user btn-block">
+                                    <button type="submit" class="btn btn-primary btn-user btn-block" id="btnSend"  data-toggle="modal" data-target="#modalSubscriptionForm" disabled>
                                         Send
                                     </button>
                                 </form>
@@ -309,6 +311,29 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="modal fade" id="modalSubscriptionForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title w-100 font-weight-bold">Insert PIN</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body mx-3">
+                            <div class="md-form">
+                            <input type="password" class="form-control form-control-user" name="pin"
+                                                id="pin" placeholder="PIN (6-digit numeric)" pattern="[0-9]{6}" maxlength="6" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary btn-user btn-block">Confirm</button>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
                 <!-- /.container-fluid -->
 
             </div>
@@ -351,7 +376,32 @@
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
-
+    <script>
+        $('#accNumber').on('keyup', function(){
+            var myLength = $("#accNumber").val().length;
+            if (myLength == 16) {
+                var num = $('#accNumber').val();
+                $.post('cek_account.php',
+                    {'acc_id' : num},
+                    function(data) {
+                        if (data == 'false') {
+                            $("#alertAcc").html("<div class='alert alert-danger my-3' role='alert'>Destination Account Number Not Found</div>");
+                            $("#btnSend").prop('disabled', true);
+                        } else {
+                            $("#alertAcc").html("<div class='alert alert-success my-3' role='alert'> Destination Account Found: " + data + "</div>");
+                            $("#btnSend").prop('disabled', false);
+                        }
+                    }
+                );
+            } 
+            else if (myLength < 16) {
+                $("#btnSend").prop('disabled', true);
+            }
+            else if (myLength > 16) {
+                $("#btnSend").prop('disabled', true);
+            }
+        });
+    </script>
 </body>
 
 </html>

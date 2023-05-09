@@ -55,12 +55,15 @@ if ($nrows > 0) {
     $_SESSION['username'] = $username;
     if ($row = $res->fetch_assoc()){
         if($row['role'] == 'customer'){
+            $_SESSION['role'] = 'customer';
             header('location: index.php');
         }
         elseif($row['role'] == 'manager'){
+            $_SESSION['role'] = 'manager';
             header('location: admin/manager/index.php');
         }
         elseif($row['role'] == 'teller'){
+            $_SESSION['role'] = 'teller';
             header('location: teller/index.php');
         }
     }
