@@ -44,7 +44,16 @@
                                         </button>
                                         </div>';
                                     }
+                                    elseif ($_GET['err'] == 2) {
+                                        echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <strong>Oops!</strong> Password you entered does not match! Please check the password again.
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>';
+                                    }
                                 }
+                                
 
                                 if (isset($_GET['success'])) {
                                     if ($_GET['success'] == 1) {
@@ -92,7 +101,7 @@
                                 </div>
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control-user" id="exampleInputEmail"
-                                        placeholder="PIN (6-digit numeric)" name="pin" pattern="[0-9]{1,6}" required>
+                                        placeholder="PIN (6-digit numeric)" name="pin" pattern="[0-9]{6}" required>
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-user btn-block">
                                     Register Account

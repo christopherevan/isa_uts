@@ -50,6 +50,15 @@ function checkAccountId($aid, $conn) {
     }
 }
 
+function checkPassword($pass, $repeatPas){
+    if($pass == $repeatPas){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
 $name = $_POST['name'];
 $username = $_POST['username'];
 $email = $_POST['email'];
@@ -65,6 +74,11 @@ $enc_user = array();
 
 $aes = new AES();
 $conn = new conn();
+
+if(!checkPassword($pass, $passRe)){
+    header('location: register.php?err=2');
+    die();
+}
 
 $i = 0;
 foreach ($user as $u) {
