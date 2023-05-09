@@ -56,6 +56,31 @@ if (isset($_SESSION['user'])) {
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                     </div>';
+                                                } else if ($_GET['err'] == 2) {
+                                                    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                    <strong>Session timed out!</strong> Please log in again
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    </div>';
+                                                } else if ($_GET['err'] == 3) {
+                                                    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                    <strong>Invalid CSRF Token!</strong> Please log in again
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    </div>';
+                                                }
+                                            }
+
+                                            if (isset($_GET['success'])) {
+                                                if ($_GET['success'] == 1) {
+                                                    echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                    <strong>Success!</strong> Your password has been changed. Please log in again using your new password
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    </div>';
                                                 }
                                             }
                                         ?>

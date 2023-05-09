@@ -4,6 +4,13 @@ require_once('./class/conn.php');
 session_start();
 
 if (isset($_POST['pin']) && isset($_POST['acc_id']) && isset($_POST['amount'])) {
+    if (!($_SESSION['csrf_token'] == $_POST['csrf_token'])) {
+        echo 'csrf';
+        session_unset();
+        session_destroy();
+        die();
+    }
+
     $aes = new AES();
     $conn = new conn();
     
@@ -89,8 +96,6 @@ if (isset($_POST['pin']) && isset($_POST['acc_id']) && isset($_POST['amount'])) 
             $stmt = $conn->mysqli->prepare($sql);
             $stmt->bind_param('ds', $newBal, $user['dest']);
             $stmt->execute();
-            
-            // print_r($user);
 
             $sql = "INSERT into transactions(amount, transaction_type, account_origin, account_destination) values (?,?,?,?)";
             $stmt = $conn->mysqli->prepare($sql);

@@ -316,6 +316,7 @@ foreach ($user as $u) {
 
                     <!-- Content Row -->
                     <form method="post" action="profile_process.php">
+                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'];?>">
                     <div class="card mb-4">
                         <div class="card-body">
                             <div class="row">

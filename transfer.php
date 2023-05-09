@@ -404,6 +404,15 @@
     <script>
         var accdone = false;
         var amountdone = false;
+        var token = "";
+
+        $(document).ready(function() {
+            $.post('get_token.php',
+                function(data) {
+                    token = data;
+                }
+            );
+        });
 
         function cekFields() {
             if (accdone && amountdone) {
@@ -425,11 +434,14 @@
                 {   
                     'acc_id' : accId,
                     'pin' : pin,
-                    'amount': amount
+                    'amount' : amount,
+                    'csrf_token' : token
                 },
                 function(data) {
                     if (data == 'false') {
                         $("#modalWarning").html("<div class='alert alert-danger mt-3 mb-0' role='alert'>Wrong PIN. Please try again</div>");
+                    } else if (data == 'csrf') {
+                        window.location.replace("login.php?err=3");
                     } else if (data == 'true') {
                         window.location.replace("transfer.php?success=1");
                     }

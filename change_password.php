@@ -294,7 +294,7 @@ $conn = new conn();
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $dec_user['name'];?></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION['username'];?></span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -306,16 +306,44 @@ $conn = new conn();
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container">
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">My Account</h1>
-                        
                     </div>
+                    <?php
+                        if (isset($_GET['err'])) {
+                            if ($_GET['err'] == 1) {
+                                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Oops!</strong> An error happened while trying to change your password. Please try again
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                </div>';
+                            } else if ($_GET['err'] == 2) {
+                                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Oops!</strong> You`ve entered the wrong old password. Please try again
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                </div>';
+                            } else if ($_GET['err'] == 3) {
+                                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Oops!</strong> The new passwords do not match. Please try again
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                </div>';
+                            }
+                        }
+
+                        
+                    ?>
 
                     <!-- Content Row -->
-                    <form method="post" action="profile_process.php">
+                    <form method="post" action="change_password_process.php">
+                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'];?>">
                     <div class="card mb-4">
                         <div class="card-body">
                             <div class="row">
