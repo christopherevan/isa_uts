@@ -12,9 +12,9 @@ class AES {
         return base64_encode($encrypted_data);
     }
 
-    public function decrypt($encrypted_data, $iv) {
+    public function decrypt($encrypted_data) {
         // Decrypt the data using the decryption key, algorithm, mode, and IV
-        $decrypted_data = openssl_decrypt(base64_decode($encrypted_data), $this->cipher, $this->key, 0, base64_decode($iv));
+        $decrypted_data = openssl_decrypt(base64_decode($encrypted_data), $this->cipher, $this->key, 0, base64_decode($this->iv));
 
         // Return the decrypted data
         return $decrypted_data;

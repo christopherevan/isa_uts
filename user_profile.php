@@ -1,3 +1,31 @@
+<?php
+require_once('./class/encrypt.php');
+require_once('./class/conn.php');
+session_start();
+
+$aes = new AES();
+$conn = new conn();
+
+$enc_user = $aes->encrypt($_SESSION['username']);
+$sql = "SELECT u.*, c.*, a.* FROM users as u INNER JOIN customers as c ON u.username=c.username 
+INNER JOIN accounts as a ON c.customer_id=a.customer_id WHERE u.username=?";
+$stmt = $conn->mysqli->prepare($sql);
+$stmt->bind_param('s', $enc_user);
+$stmt->execute();
+$res = $stmt->get_result();
+
+if ($row = $res->fetch_assoc()){
+    $user = array($row['name'], $row['email'], $row['phone_number'],  $row['address'], $row['account_id']);
+    $user_arr = array('name', 'email', 'tel', 'address', 'accountnum');
+    $dec_user = array();
+}
+
+$i = 0;
+foreach ($user as $u) {
+    $dec_user[$user_arr[$i]] = $aes->decrypt($u);
+    $i++;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -266,7 +294,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $dec_user['name'];?></span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -297,7 +325,7 @@
                                 <p class="mb-0">Full Name</p>
                             </div>
                             <div class="col-sm-9">
-                                <p class="text-muted mb-0">Johnatan Smith</p>
+                                <p class="text-muted mb-0"><?php echo $dec_user['name'];?></p>
                             </div>
                             </div>
                             <hr>
@@ -306,7 +334,7 @@
                                 <p class="mb-0">Email</p>
                             </div>
                             <div class="col-sm-9">
-                                <p class="text-muted mb-0">example@example.com</p>
+                                <p class="text-muted mb-0"><?php echo $dec_user['email'];?></p>
                             </div>
                             </div>
                             <hr>
@@ -315,7 +343,7 @@
                                 <p class="mb-0">Phone</p>
                             </div>
                             <div class="col-sm-9">
-                                <p class="text-muted mb-0">(097) 234-5678</p>
+                                <p class="text-muted mb-0"><?php echo $dec_user['tel'];?></p>
                             </div>
                             </div>
                             <hr>
@@ -324,7 +352,7 @@
                                 <p class="mb-0">Address</p>
                             </div>
                             <div class="col-sm-9">
-                                <p class="text-muted mb-0">(098) 765-4321</p>
+                                <p class="text-muted mb-0"><?php echo $dec_user['address'];?></p>
                             </div>
                             </div>
                             <hr>
@@ -333,7 +361,7 @@
                                 <p class="mb-0">Account Number</p>
                             </div>
                             <div class="col-sm-9">
-                                <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+                                <p class="text-muted mb-0"><?php echo $dec_user['accountnum'];?></p>
                             </div>
                             </div>
                             <hr>
