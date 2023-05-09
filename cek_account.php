@@ -1,6 +1,7 @@
 <?php
 require_once('./class/encrypt.php');
 require_once('./class/conn.php');
+session_start();
 
 if (isset($_POST['acc_id'])) {
     $aes = new AES();

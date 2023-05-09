@@ -34,7 +34,7 @@ if (isset($_POST['pin']) && isset($_POST['acc_id']) && isset($_POST['amount'])) 
     // echo "numrows $nrows";
     if ($nrows > 0) {
             // $accDest = $sender_acc_id;
-            $enc_dest = $sender_acc_id;
+            $enc_dest = $enc_aid;
             $amount = $amount;
             
             $enc_user = $aes->encrypt($_SESSION['username']);

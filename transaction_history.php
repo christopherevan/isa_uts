@@ -1,3 +1,44 @@
+<?php
+require_once('./class/encrypt.php');
+require_once('./class/conn.php');
+session_start();
+
+$aes = new AES();
+$conn = new conn();
+
+$enc_user = $aes->encrypt($_SESSION['username']);
+$sql = "SELECT a.account_id FROM users as u INNER JOIN customers as c ON u.username=c.username 
+    INNER JOIN accounts as a ON c.customer_id=a.customer_id WHERE u.username=?";
+$stmt = $conn->mysqli->prepare($sql);
+$stmt->bind_param('s', $enc_user);
+$stmt->execute();
+$res = $stmt->get_result();
+
+while ($row = $res->fetch_assoc()){
+    $sender_acc_id = $row['account_id'];
+}
+$debit='DEBIT';
+$kredit='CREDIT';
+$sql = "SELECT transaction_time, account_origin, account_destination, transaction_type, amount FROM transactions 
+WHERE (account_origin=? AND transaction_type=?) OR (account_destination=? AND transaction_type=?)";
+$stmt = $conn->mysqli->prepare($sql);
+$stmt->bind_param('ssss', $sender_acc_id, $kredit, $sender_acc_id, $debit);
+$stmt->execute();
+$res = $stmt->get_result();
+
+$data = array();
+$data_idx = array('transaction_time', 'account_origin', 'account_destination', 'transaction_type', 'amount');
+while ($row = $res->fetch_assoc()) {
+    $decrypted_row = array();
+    foreach ($row as $key => $value) {
+        if ($key == 'account_origin' || $key == 'account_destination') {
+            $value = $aes->decrypt($value);
+        }
+        $decrypted_row[$key] = $value;
+    }
+    array_push($data, $decrypted_row);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -81,7 +122,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="logout.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Logout</span></a>
             </li>
@@ -290,30 +331,40 @@
                                     <thead>
                                         <tr>
                                             <th>Date</th>
-                                            <th>Details</th>
-                                            <th>Amount</th>
+                                            <th>From</th>
+                                            <th>To</th>
                                             <th>Type</th>
+                                            <th>Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>61</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Garrett Winters</td>
-                                            <td>Accountant</td>
-                                            <td>Tokyo</td>
-                                            <td>63</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ashton Cox</td>
-                                            <td>Junior Technical Author</td>
-                                            <td>San Francisco</td>
-                                            <td>66</td>
-                                        </tr>
+                                        <?php
+                                            foreach ($data as $d) {
+                                                echo "<tr>";
+
+                                                $color = "";
+                                                if ($d['transaction_type'] == 'DEBIT') {
+                                                    $color = "text-success";
+                                                } else {
+                                                    $color = "text-danger";
+                                                }
+
+                                                foreach ($d as $key => $value){
+                                                    $dataColor = "";
+                                                    if ($key == "transaction_type" || $key == "amount") {
+                                                        $dataColor = "class='$color'";
+                                                    }
+
+                                                    if ($key == "amount") {
+                                                        $rupiah = number_format($value,0,',','.');
+                                                        $value = 'Rp'.$rupiah;
+                                                    }
+                                                    
+                                                    echo "<td $dataColor>$value</td>";
+                                                }
+                                                echo "</tr>";
+                                            }
+                                        ?>
                                     </tbody>
                                 </table>
                 </div>

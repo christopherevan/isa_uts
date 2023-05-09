@@ -47,6 +47,18 @@ if (isset($_SESSION['user'])) {
                                 <div class="p-5">
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                                        <?php
+                                            if (isset($_GET['err'])) {
+                                                if ($_GET['err'] == 1) {
+                                                    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                    <strong>Oops!</strong> Incorrect username or password. Try again.
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    </div>';
+                                                }
+                                            }
+                                        ?>
                                     </div>
                                     <form class="user" method="post" action="login_process.php">
                                         <div class="form-group">

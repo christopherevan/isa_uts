@@ -109,7 +109,7 @@ foreach ($user as $u) {
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="logout.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Logout</span></a>
             </li>
@@ -311,7 +311,7 @@ foreach ($user as $u) {
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">My Account</h1>
-                        <button type="submit" class="btn btn-primary btn-user">
+                        <button type="submit" class="btn btn-primary btn-user" onclick="window.location.replace('edit_profile.php')">
                             <i class="fas fa-user-edit text-white mx-1"></i>               
                             Edit Profile 
                         </button>
@@ -320,6 +320,19 @@ foreach ($user as $u) {
                     <!-- Content Row -->
                     <div class="card mb-4">
                         <div class="card-body">
+                            <?php
+                            if (isset($_GET['success'])) {
+                                if ($_GET['success'] == 1) {
+                                    echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong>Edit Successful!</strong> Your profile has been updated.
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>';
+                                }
+                            }
+                            ?>
+
                             <div class="row">
                             <div class="col-sm-3">
                                 <p class="mb-0">Full Name</p>
