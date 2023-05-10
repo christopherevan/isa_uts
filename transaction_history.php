@@ -438,95 +438,186 @@ while ($row = $res->fetch_assoc()) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://unpkg.com/jspdf-invoice-template@1.4.0/dist/index.js"></script>
     <script>
-        var filename = "Transactions Report";
-        var username = "";
+        // var filename = "Transactions Report";
+        // var username = "";
 
-        document.addEventListener("DOMContentLoaded", () => {
-            username = document.getElementById('user_name').innerHTML;
+        // document.addEventListener("DOMContentLoaded", () => {
+        //     username = document.getElementById('user_name').innerHTML;
 
-            var btn = document.getElementById("btn_pdf");
+        //     var btn = document.getElementById("btn_pdf");
 
-            btn.addEventListener("click", generatePDF());
-        });
+        //     btn.addEventListener("click", generatePDF());
+        // });
 
-        function generatePDF() {
-            var pdfObject = jsPDFInvoiceTemplate.default(props);
-            console.log("Obj created: ", pdfObject);
-        }
+        // function generatePDF() {
+        //     var pdfObject = jsPDFInvoiceTemplate.default(props);
+        //     console.log("Obj created: ", pdfObject);
+        // }
 
-        var props = {
-            outputType: jsPDFInvoiceTemplate.OutputType.Save,
-            returnJsPDFDocObject: true,
-            fileName: filename,
-            orientationLandscape: false,
-            compress: true,
-            logo: {
-                src: "https://raw.githubusercontent.com/edisonneza/jspdf-invoice-template/demo/images/logo.png",
-                type: 'PNG', //optional, when src= data:uri (nodejs case)
-                width: 53.33, //aspect ratio = width/height
-                height: 26.66,
-                margin: {
-                    top: 0, //negative or positive num, from the current position
-                    left: 0 //negative or positive num, from the current position
-                }
-            },
-            business: {
-                name: "Mi-Bank",
-                address: "Jl. Bratang Kecil No.29, Surabaya",
-                phone: "(+62) 839 11 11 111",
-                email: "contact@mibank.com",
-                website: "www.mibank.com",
-            },
-            contact: {
-                label: "Transaction Report issued for account:",
-                name: username
-            },
-            invoice: {
-                headerBorder: false,
-                tableBodyBorder: false,
-                header: [
-                {
-                    title: "#", 
-                    style: { 
-                    width: 10 
-                    } 
-                }, 
-                { 
-                    title: "Date",
-                    style: {
-                    width: 30
-                    } 
-                }, 
-                { 
-                    title: "From",
-                    style: {
-                    width: 40
-                    } 
-                }, 
-                { 
-                    title: "To",
-                    style: {
-                    width: 40
+        // var props = {
+        //     outputType: jsPDFInvoiceTemplate.OutputType.Save,
+        //     returnJsPDFDocObject: true,
+        //     fileName: filename,
+        //     orientationLandscape: false,
+        //     compress: true,
+        //     logo: {
+        //         src: "https://raw.githubusercontent.com/edisonneza/jspdf-invoice-template/demo/images/logo.png",
+        //         type: 'PNG', //optional, when src= data:uri (nodejs case)
+        //         width: 53.33, //aspect ratio = width/height
+        //         height: 26.66,
+        //         margin: {
+        //             top: 0, //negative or positive num, from the current position
+        //             left: 0 //negative or positive num, from the current position
+        //         }
+        //     },
+        //     business: {
+        //         name: "Mi-Bank",
+        //         address: "Jl. Bratang Kecil No.29, Surabaya",
+        //         phone: "(+62) 839 11 11 111",
+        //         email: "contact@mibank.com",
+        //         website: "www.mibank.com",
+        //     },
+        //     contact: {
+        //         label: "Transaction Report issued for account:",
+        //         name: username
+        //     },
+        //     invoice: {
+        //         headerBorder: false,
+        //         tableBodyBorder: false,
+        //         header: [
+        //         {
+        //             title: "#", 
+        //             style: { 
+        //             width: 10 
+        //             } 
+        //         }, 
+        //         { 
+        //             title: "Date",
+        //             style: {
+        //             width: 30
+        //             } 
+        //         }, 
+        //         { 
+        //             title: "From",
+        //             style: {
+        //             width: 40
+        //             } 
+        //         }, 
+        //         { 
+        //             title: "To",
+        //             style: {
+        //             width: 40
+        //             }
+        //         },
+        //         { title: "Type"},
+        //         { title: "Amount"}
+        //         ],
+        //         table: Array.from(Array(10), (item, index)=>([
+        //             index + 1,
+        //             "There are many variations ",
+        //             "Lorem Ipsum is simply dummy text dummy text ",
+        //             200.5,
+        //             4.5,
+        //             "m2"
+        //         ]))
+        //     },
+        //     footer: {
+        //         text: "The invoice is created on a computer and is valid without the signature and stamp.",
+        //     },
+        //     pageEnable: true,
+        //     pageLabel: "Page ",
+        // };
+    </script>
+
+    <script>
+        $('#btn_pdf').on('click', function() {
+            $.get('get_trx_history.php', function(data) {
+                var filename = "Transactions Report";
+                const jsonData = JSON.parse(data);
+                var username = $('#user_name').text();
+                // console.log(jsonData);
+
+                const rows = jsonData.map((transaction, index) => ([
+                    index + 1,
+                    transaction.transaction_time,
+                    transaction.account_origin,
+                    transaction.account_destination,
+                    transaction.transaction_type,
+                    transaction.amount
+                ]));
+
+                console.log(rows);
+
+                var props = {
+                outputType: jsPDFInvoiceTemplate.OutputType.Save,
+                returnJsPDFDocObject: true,
+                fileName: filename,
+                orientationLandscape: false,
+                compress: true,
+                logo: {
+                    src: "img/mixue.jpg",
+                    type: 'JPG', //optional, when src= data:uri (nodejs case)
+                    width: 30, //aspect ratio = width/height
+                    height: 30,
+                    margin: {
+                        top: 0, //negative or positive num, from the current position
+                        left: 0 //negative or positive num, from the current position
                     }
                 },
-                { title: "Type"},
-                { title: "Amount"}
-                ],
-                table: Array.from(Array(10), (item, index)=>([
-                    index + 1,
-                    "There are many variations ",
-                    "Lorem Ipsum is simply dummy text dummy text ",
-                    200.5,
-                    4.5,
-                    "m2"
-                ]))
-            },
-            footer: {
-                text: "The invoice is created on a computer and is valid without the signature and stamp.",
-            },
-            pageEnable: true,
-            pageLabel: "Page ",
-        };
+                business: {
+                    name: "Mi-Bank",
+                    address: "Jl. Bratang Kecil No.29, Surabaya",
+                    phone: "(+62) 839 11 11 111",
+                    email: "contact@mibank.com",
+                    website: "www.mibank.com",
+                },
+                contact: {
+                    label: "Transaction Report issued for account:",
+                    name: username
+                },
+                invoice: {
+                    headerBorder: false,
+                    tableBodyBorder: false,
+                    header: [ 
+                    { 
+                        title: "#",
+                        style: {
+                        width: 10
+                        } 
+                    }, 
+                    { 
+                        title: "Date",
+                        style: {
+                        width: 30
+                        } 
+                    }, 
+                    { 
+                        title: "From",
+                        style: {
+                        width: 40
+                        } 
+                    }, 
+                    { 
+                        title: "To",
+                        style: {
+                        width: 40
+                        }
+                    },
+                    { title: "Type"},
+                    { title: "Amount"}
+                    ],
+                    table: rows
+                },
+                footer: {
+                    text: "The invoice is created on a computer and is valid without the signature and stamp.",
+                },
+                pageEnable: true,
+                pageLabel: "Page ",
+            };
+
+                var pdfObject = jsPDFInvoiceTemplate.default(props);
+            });
+        });
     </script>
 </body>
 
