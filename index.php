@@ -18,6 +18,42 @@ while ($row = $res->fetch_assoc()){
     $bal = $row['balance'];
     $rupiah = number_format($bal,0,',','.');
     $bal = 'Rp'.$rupiah;
+    $acc_origin=$row['account_id'];
+}
+
+$debit='DEBIT';
+$kredit='CREDIT';
+
+$sql = "SELECT SUM(amount) AS total_amount
+FROM transactions
+WHERE account_origin = ?
+  AND transaction_type = ?
+  AND YEAR(transaction_time) = YEAR(CURRENT_DATE())
+  AND MONTH(transaction_time) = MONTH(CURRENT_DATE())";
+$stmt = $conn->mysqli->prepare($sql);
+$stmt->bind_param('ss', $acc_origin, $kredit);
+$stmt->execute();
+$res = $stmt->get_result();
+while ($row = $res->fetch_assoc()){
+    $spending = $row['total_amount'];
+    $rupiah = number_format($spending,0,',','.');
+    $spending = '-Rp'.$rupiah;
+}
+
+$sql = "SELECT SUM(amount) AS total_amount
+FROM transactions
+WHERE account_destination = ?
+  AND transaction_type = ?
+  AND YEAR(transaction_time) = YEAR(CURRENT_DATE())
+  AND MONTH(transaction_time) = MONTH(CURRENT_DATE())";
+$stmt = $conn->mysqli->prepare($sql);
+$stmt->bind_param('ss', $acc_origin, $debit);
+$stmt->execute();
+$res = $stmt->get_result();
+while ($row = $res->fetch_assoc()){
+    $earning = $row['total_amount'];
+    $rupiah = number_format($earning,0,',','.');
+    $earning = '+Rp'.$rupiah;
 }
 ?>
 
@@ -355,7 +391,7 @@ while ($row = $res->fetch_assoc()){
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
                                                 This Month Spending</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $spending;?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-money-bill-wave-alt fa-2x text-gray-300"></i>
@@ -373,7 +409,7 @@ while ($row = $res->fetch_assoc()){
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                             This Month Income</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $earning;?></div>
                                         </div>
                                         <div class="col-auto">
                                             <!-- <i class="fas fa-solid fa-hand-holding-dollar fa-2x text-gray-300"></i> -->
