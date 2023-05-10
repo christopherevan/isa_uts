@@ -307,7 +307,7 @@ while ($row = $res->fetch_assoc()) {
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="user_name">Douglas McGee</span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -324,6 +324,10 @@ while ($row = $res->fetch_assoc()) {
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">History</h1>
+                        <button class="btn btn-primary btn-user" id="btn_pdf">
+                            <i class="fas fa-file-download text-white mx-1"></i>               
+                            Download PDF 
+                        </button>
                     </div>
 
                     <!-- Content Row -->
@@ -431,6 +435,99 @@ while ($row = $res->fetch_assoc()) {
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/jspdf-invoice-template@1.4.0/dist/index.js"></script>
+    <script>
+        var filename = "Transactions Report";
+        var username = "";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            username = document.getElementById('user_name').innerHTML;
+
+            var btn = document.getElementById("btn_pdf");
+
+            btn.addEventListener("click", generatePDF());
+        });
+
+        function generatePDF() {
+            var pdfObject = jsPDFInvoiceTemplate.default(props);
+            console.log("Obj created: ", pdfObject);
+        }
+
+        var props = {
+            outputType: jsPDFInvoiceTemplate.OutputType.Save,
+            returnJsPDFDocObject: true,
+            fileName: filename,
+            orientationLandscape: false,
+            compress: true,
+            logo: {
+                src: "https://raw.githubusercontent.com/edisonneza/jspdf-invoice-template/demo/images/logo.png",
+                type: 'PNG', //optional, when src= data:uri (nodejs case)
+                width: 53.33, //aspect ratio = width/height
+                height: 26.66,
+                margin: {
+                    top: 0, //negative or positive num, from the current position
+                    left: 0 //negative or positive num, from the current position
+                }
+            },
+            business: {
+                name: "Mi-Bank",
+                address: "Jl. Bratang Kecil No.29, Surabaya",
+                phone: "(+62) 839 11 11 111",
+                email: "contact@mibank.com",
+                website: "www.mibank.com",
+            },
+            contact: {
+                label: "Transaction Report issued for account:",
+                name: username
+            },
+            invoice: {
+                headerBorder: false,
+                tableBodyBorder: false,
+                header: [
+                {
+                    title: "#", 
+                    style: { 
+                    width: 10 
+                    } 
+                }, 
+                { 
+                    title: "Date",
+                    style: {
+                    width: 30
+                    } 
+                }, 
+                { 
+                    title: "From",
+                    style: {
+                    width: 40
+                    } 
+                }, 
+                { 
+                    title: "To",
+                    style: {
+                    width: 40
+                    }
+                },
+                { title: "Type"},
+                { title: "Amount"}
+                ],
+                table: Array.from(Array(10), (item, index)=>([
+                    index + 1,
+                    "There are many variations ",
+                    "Lorem Ipsum is simply dummy text dummy text ",
+                    200.5,
+                    4.5,
+                    "m2"
+                ]))
+            },
+            footer: {
+                text: "The invoice is created on a computer and is valid without the signature and stamp.",
+            },
+            pageEnable: true,
+            pageLabel: "Page ",
+        };
+    </script>
 </body>
 
 </html>
