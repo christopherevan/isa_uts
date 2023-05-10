@@ -47,7 +47,7 @@ if ($nrows > 0) {
         }
         else if($row['role'] == 'teller'){
             $_SESSION['role'] = 'teller';
-            header('location: teller/index.php');
+            header('location: admin/teller/index.php');
         }
     }  
 } else {

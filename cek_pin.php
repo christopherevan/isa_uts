@@ -81,7 +81,8 @@ if (isset($_POST['pin']) && isset($_POST['acc_id']) && isset($_POST['amount'])) 
             }
             
             if($balanceOrigin < $amount){
-                header('location: transfer.php?err=1');
+                echo 'ins';
+                // header('location: transfer.php?err=1');
                 die();
             }
             

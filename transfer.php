@@ -347,6 +347,8 @@ $dec_user = $aes->decrypt($user);
                         window.location.replace("login.php?err=3");
                     } else if (data == 'true') {
                         window.location.replace("transfer.php?success=1");
+                    }else if (data == 'ins') {
+                        window.location.replace("transfer.php?err=1");
                     }
                 }
             );
