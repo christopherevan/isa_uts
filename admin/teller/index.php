@@ -1,3 +1,20 @@
+<?php
+session_start();
+
+if (!(isset($_SESSION['username']) && isset($_SESSION['role']))) {
+    header('location: login.php?err=2');
+    die();
+}
+
+if (!($_SESSION['role'] == "teller" || $_SESSION['role'] == "manager")) {
+    session_unset();
+    session_destroy();
+    header('location: login.php?err=4');
+    die();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

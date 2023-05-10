@@ -70,6 +70,13 @@ if (isset($_SESSION['user'])) {
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                     </div>';
+                                                } else if ($_GET['err'] == 4) {
+                                                    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                    <strong>Access forbidden!</strong> Please log in again. If this shouldn`t be happening, contact your admin
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    </div>';
                                                 }
                                             }
 

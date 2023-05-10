@@ -41,11 +41,11 @@ if ($nrows > 0) {
             $_SESSION['role'] = 'customer';
             header('location: index.php');
         }
-        elseif($row['role'] == 'manager'){
+        else if($row['role'] == 'manager'){
             $_SESSION['role'] = 'manager';
             header('location: admin/manager/index.php');
         }
-        elseif($row['role'] == 'teller'){
+        else if($row['role'] == 'teller'){
             $_SESSION['role'] = 'teller';
             header('location: teller/index.php');
         }
