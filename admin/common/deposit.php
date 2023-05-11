@@ -69,39 +69,94 @@ $enc_user = $aes->encrypt($_SESSION['username']);
             <!-- Divider -->
             <hr class="sidebar-divider">
 
-            <div class="sidebar-heading">
-                Transactions
-            </div>
-            <li class="nav-item">
-                <a class="nav-link" href="../common/customer_transactions.php">
-                    <i class="fas fa-fw fa-clipboard-list"></i>
-                    <span>Customer Transactions</span>
-                </a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="../common/deposit.php" >
-                    <i class="fas fa-fw fa-money-bill-wave-alt"></i>
-                    <span>Deposit</span>
-                </a>
-            </li>
-            
-            <hr class="sidebar-divider">
-            <div class="sidebar-heading">
-                Data
-            </div>
-            <li class="nav-item">
-                <a class="nav-link" href="../common/list_customer.php">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>Customer List</span>
-                </a>
-            </li>
-
-            <hr class="sidebar-divider">
-            <li class="nav-item">
-                <a class="nav-link" href="../../logout.php">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Logout</span></a>
-            </li>
+            <?php
+                if ($_SESSION['role']=='manager'){
+                    echo '<div class="sidebar-heading">
+                    Transactions
+                </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="../common/customer_transactions.php">
+                        <i class="fas fa-fw fa-clipboard-list"></i>
+                        <span>Customer Transactions</span>
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="../common/deposit.php" >
+                        <i class="fas fa-fw fa-money-bill-wave-alt"></i>
+                        <span>Deposit</span>
+                    </a>
+                </li>
+                
+                <hr class="sidebar-divider">
+                <div class="sidebar-heading">
+                    Data
+                </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="../common/list_customer.php">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Customer List</span>
+                    </a>
+                </li>
+    
+                <hr class="sidebar-divider">
+                <div class="sidebar-heading">
+                    Employee
+                </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="../manager/create_employee_account.php">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Create Employee Account</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../manager/list_employees.php">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Employees List</span>
+                    </a>
+                </li>
+    
+                <hr class="sidebar-divider">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../logout.php">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Logout</span></a>
+                </li>';
+                }else if($_SESSION['role']=='teller'){
+                    echo'<div class="sidebar-heading">
+                    Transactions
+                </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="../common/customer_transactions.php">
+                        <i class="fas fa-fw fa-clipboard-list"></i>
+                        <span>Customer Transactions</span>
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="../common/deposit.php" >
+                        <i class="fas fa-fw fa-money-bill-wave-alt"></i>
+                        <span>Deposit</span>
+                    </a>
+                </li>
+                
+                <hr class="sidebar-divider">
+                <div class="sidebar-heading">
+                    Data
+                </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="../common/list_customer.php">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Customer List</span>
+                    </a>
+                </li>
+    
+                <hr class="sidebar-divider">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../logout.php">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Logout</span></a>
+                </li>';
+                }
+            ?>
 
             <!-- TELLER -->
 
