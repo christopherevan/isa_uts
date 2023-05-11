@@ -247,8 +247,8 @@ if (!($_SESSION['role'] == "manager")) {
                                         <input type="test" class="form-control form-control-user" name="amount"
                                             id="moneyAmount" placeholder="Insert Employee Password" required>
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-user btn-block" id="btnSend"  data-toggle="modal" data-target="#modalSubscriptionForm" enabled>
-                                        Send
+                                    <button type="submit" class="btn btn-primary btn-user btn-block" id="btnCreate"  data-toggle="modal" data-target="#modalSubscriptionForm">
+                                        Create Account
                                     </button>
                                     <!-- <button type="submit" class="btn btn-primary btn-user btn-block" id="btnSend" disabled>
                                         Send
@@ -326,6 +326,9 @@ if (!($_SESSION['role'] == "manager")) {
     <!-- Page level custom scripts -->
     <script src="../../js/demo/chart-area-demo.js"></script>
     <script src="../../js/demo/chart-pie-demo.js"></script>
+    <script>
+        $("#alertAccTo").html("<div class='alert alert-success my-3' role='alert'> Account Created!</div>");
+    </script>
 
 </body>
 

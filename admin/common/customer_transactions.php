@@ -296,7 +296,7 @@ $enc_user = $aes->encrypt($_SESSION['username']);
                                         <input type="number" class="form-control form-control-user" name="amount"
                                             id="moneyAmount" placeholder="Insert Amount" min="1" required>
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-user btn-block" id="btnSend"  data-toggle="modal" data-target="#modalSubscriptionForm" disabled>
+                                    <button type="submit" class="btn btn-primary btn-user btn-block" id="btnSend"  data-toggle="modal" data-target="#modalSubscriptionForm">
                                         Send
                                     </button>
                                     <!-- <button type="submit" class="btn btn-primary btn-user btn-block" id="btnSend" disabled>
@@ -547,19 +547,6 @@ $enc_user = $aes->encrypt($_SESSION['username']);
             //     accdone = false;
             //     cekFields();
             // }
-        });
-
-        $('#moneyAmount').on('keyup', function(){
-            var myVal = $("#moneyAmount").val();
-            if (myVal >0) {
-                amountdone = true;
-                cekFields();
-            } 
-            else{
-                amountdone=false;
-                cekFields();
-            }
-
         });
     </script>
 </body>
