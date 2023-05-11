@@ -121,7 +121,7 @@ $enc_user = $aes->encrypt($_SESSION['username']);
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Logout</span></a>
                 </li>';
-                }else if($_SESSION['role']=='teller'){
+                } else if($_SESSION['role']=='teller'){
                     echo'<div class="sidebar-heading">
                     Transactions
                 </div>
@@ -387,9 +387,9 @@ $enc_user = $aes->encrypt($_SESSION['username']);
             } else {
                 $("#btnSend").prop('disabled', true);
             }
-            console.log(accdone);
-            console.log(amountdone);
-            console.log("---------");
+            // console.log(accdone);
+            // console.log(amountdone);
+            // console.log("---------");
         }
 
         $('#btnPassword').on('click', function(){

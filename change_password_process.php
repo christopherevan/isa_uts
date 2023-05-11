@@ -63,7 +63,6 @@ if (isset($_POST['passOld']) && isset($_POST['passNew']) && isset($_POST['passNe
 
     header('location: login.php?success=1');
     $conn->mysqli->close();
-    die();
 
 } else {
     header('location: change_password.php?err=1');
