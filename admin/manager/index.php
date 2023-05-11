@@ -201,7 +201,7 @@ $dispRole = "<strong>$roleName</strong>";
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <marquee><h1 class="h3 mb-0 text-gray-800">SELAMAT DATANG BAPAK MANAGER DI SISTEM MI-BANK ADMIN</h1></marquee>
+                        <marquee><h1 class="h3 mb-0 text-gray-800">SELAMAT DATANG BAPAK/IBU MANAGER DI SISTEM MI-BANK ADMIN</h1></marquee>
                     </div>
 
 
@@ -215,13 +215,13 @@ $dispRole = "<strong>$roleName</strong>";
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
+            <!-- <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
                         <span>Copyright &copy; Your Website 2021</span>
                     </div>
                 </div>
-            </footer>
+            </footer> -->
             <!-- End of Footer -->
 
         </div>
