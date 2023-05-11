@@ -14,6 +14,10 @@ if (!(isset($_SESSION['username']) && isset($_SESSION['role']) && isset($_SESSIO
     kill_session('../../login.php?err=2');
 }
 
+if (!$_SESSION['role'] == "manager") {
+    kill_session('../../login.php?err=4');
+}
+
 if (!isset($_POST['csrf_token'])) {
     kill_session('../../login.php?err=3');
 }

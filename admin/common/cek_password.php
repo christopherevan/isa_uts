@@ -3,6 +3,19 @@ require_once('../../class/encrypt.php');
 require_once('../../class/conn.php');
 session_start();
 
+if (!(isset($_SESSION['username']) && isset($_SESSION['role']))) {
+    header('location: ../../login.php?err=2');
+    die();
+}
+
+if (!(($_SESSION['role'] == "teller") || ($_SESSION['role'] == "manager"))) {
+    session_unset();
+    session_destroy();
+    header('location: ../../login.php?err=4');
+    die();
+}
+
+
 if (isset($_POST['pass']) && isset($_POST['acc_id']) && isset($_POST['amount'])) {
     if (!($_SESSION['csrf_token'] == $_POST['csrf_token'])) {
         echo 'csrf';

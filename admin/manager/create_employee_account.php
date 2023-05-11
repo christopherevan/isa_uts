@@ -13,6 +13,8 @@ if (!($_SESSION['role'] == "manager")) {
     die();
 }
 
+$roleName = ucfirst($_SESSION['role']);
+$dispRole = "<strong>$roleName</strong>";
 ?>
 
 <!DOCTYPE html>
@@ -112,7 +114,7 @@ if (!($_SESSION['role'] == "manager")) {
             <hr class="sidebar-divider">
             <li class="nav-item">
                 <a class="nav-link" href="../../logout.php">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                    <i class="fas fa-fw fa-sign-out-alt"></i>
                     <span>Logout</span></a>
             </li>
             <!-- TELLER -->
@@ -183,7 +185,7 @@ if (!($_SESSION['role'] == "manager")) {
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="user_name"><?php echo $_SESSION['username']?></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600" id="user_name"><?php echo $dispRole." | ".$_SESSION['username']?></span>
                                 <img class="img-profile rounded-circle"
                                     src="../../img/undraw_profile.svg">
                             </a>

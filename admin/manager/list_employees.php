@@ -4,14 +4,14 @@ require_once('../../class/conn.php');
 session_start();
 
 if (!(isset($_SESSION['username']) && isset($_SESSION['role']))) {
-    header('location: login.php?err=2');
+    header('location: ../../login.php?err=2');
     die();
 }
 
 if (!($_SESSION['role'] == "manager")) {
     session_unset();
     session_destroy();
-    header('location: login.php?err=4');
+    header('location: ../../login.php?err=4');
     die();
 }
 
@@ -36,6 +36,9 @@ while ($row = $res->fetch_assoc()) {
     }
     array_push($data, $decrypted_row);
 }
+
+$roleName = ucfirst($_SESSION['role']);
+$dispRole = "<strong>$roleName</strong>";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -137,7 +140,7 @@ while ($row = $res->fetch_assoc()) {
                 <hr class="sidebar-divider">
                 <li class="nav-item">
                     <a class="nav-link" href="../../logout.php">
-                        <i class="fas fa-fw fa-chart-area"></i>
+                        <i class="fas fa-fw fa-sign-out-alt"></i>
                         <span>Logout</span></a>
                 </li>';
                 }else if($_SESSION['role']=='teller'){
@@ -171,7 +174,7 @@ while ($row = $res->fetch_assoc()) {
                 <hr class="sidebar-divider">
                 <li class="nav-item">
                     <a class="nav-link" href="../../logout.php">
-                        <i class="fas fa-fw fa-chart-area"></i>
+                        <i class="fas fa-fw fa-sign-out-alt"></i>
                         <span>Logout</span></a>
                 </li>';
                 }
@@ -244,7 +247,7 @@ while ($row = $res->fetch_assoc()) {
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="user_name"><?php echo $_SESSION['username']?></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600" id="user_name"><?php echo $dispRole." | ".$_SESSION['username']?></span>
                                 <img class="img-profile rounded-circle"
                                     src="../../img/undraw_profile.svg">
                             </a>

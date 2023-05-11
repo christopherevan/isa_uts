@@ -3,6 +3,13 @@ require_once('./class/encrypt.php');
 require_once('./class/conn.php');
 session_start();
 
+if (!($_SESSION['role'] == "customer")) {
+    session_unset();
+    session_destroy();
+    header('location: login.php?err=4');
+    die();
+}
+
 $aes = new AES();
 $conn = new conn();
 
