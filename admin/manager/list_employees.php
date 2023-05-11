@@ -3,14 +3,25 @@ require_once('../../class/encrypt.php');
 require_once('../../class/conn.php');
 session_start();
 
+if (!(isset($_SESSION['username']) && isset($_SESSION['role']))) {
+    header('location: login.php?err=2');
+    die();
+}
+
+if (!($_SESSION['role'] == "manager")) {
+    session_unset();
+    session_destroy();
+    header('location: login.php?err=4');
+    die();
+}
+
 $aes = new AES();
 $conn = new conn();
+
 $cust = "customer";
 $enc_user = $aes->encrypt($_SESSION['username']);
-$sql = "SELECT c.name, a.account_id, a.balance FROM users as u INNER JOIN customers as c ON u.username=c.username 
-        INNER JOIN accounts as a ON c.customer_id=a.customer_id WHERE u.role=?";
+$sql = "SELECT username, role FROM users WHERE role='manager' OR role='teller'";
 $stmt = $conn->mysqli->prepare($sql);
-$stmt->bind_param('s', $cust);
 $stmt->execute();
 $res = $stmt->get_result();
 
@@ -18,7 +29,7 @@ $data = array();
 while ($row = $res->fetch_assoc()) {
     $decrypted_row = array();
     foreach ($row as $key => $value) {
-        if ($key == 'name'|| $key == 'account_id') {
+        if ($key == 'username') {
             $value = $aes->decrypt($value);
         }
         $decrypted_row[$key] = $value;
@@ -256,9 +267,8 @@ while ($row = $res->fetch_assoc()) {
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Account Number</th>
-                                            <th>Balance</th>
+                                            <th>Username</th>
+                                            <th>Role</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -266,11 +276,6 @@ while ($row = $res->fetch_assoc()) {
                                             foreach ($data as $d) {
                                                 echo "<tr>";
                                                 foreach ($d as $key => $value){
-                                                    if ($key == "balance") {
-                                                        $rupiah = number_format($value,0,',','.');
-                                                        $value = 'Rp'.$rupiah;
-                                                    }
-                                                    
                                                     echo "<td>$value</td>";
                                                 }
                                                 echo "</tr>";
@@ -318,6 +323,23 @@ while ($row = $res->fetch_assoc()) {
             </div>
         </div>
     </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="../../vendor/jquery/jquery.min.js"></script>
+    <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="../../js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="../../vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="../../js/demo/chart-area-demo.js"></script>
+    <script src="../../js/demo/chart-pie-demo.js"></script>
 </body>
 
 </html>

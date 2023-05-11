@@ -207,13 +207,22 @@ if (!($_SESSION['role'] == "manager")) {
                             <div class="p-5">
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Create Employee Account</h1>
-                                </div>                                <!-- <form class="user" method="post" action="transfer_process.php"> -->
+                                </div>                               
+                                 <form method="post" action="create_employee_process.php">
+                                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                                     <div class="form-group">
                                         <?php
                                         if (isset($_GET['err'])) {
                                             if ($_GET['err'] == 1) {
                                                 echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                                                 <strong>Oops!</strong> Username is already taken! Please use other username.
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                </div>';
+                                            } else if ($_GET['err'] == 2) {
+                                                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                <strong>Oops!</strong> Something went wrong. Please try again
                                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -237,15 +246,24 @@ if (!($_SESSION['role'] == "manager")) {
                                         <!-- <select name="accNumber" class="form-control" id="accNumber" required>
                                             <option>aaaaa</option>
                                         </select> -->
-                                        <input type="text" class="form-control form-control-user" name="accNumber"
-                                            id="accNumber" placeholder="Insert Employee Username" required>
+                                        <input type="text" class="form-control form-control-user" name="username"
+                                            placeholder="Insert Employee Username" required>
 
                                         <div id="alertAcc"></div>
                                     </div>
                                     <div class="form-group">
                                         <label>Password</label>
-                                        <input type="test" class="form-control form-control-user" name="amount"
+                                        <input type="password" class="form-control form-control-user" name="pass"
                                             id="moneyAmount" placeholder="Insert Employee Password" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Role</label>
+                                        <select class="form-control form-select" name="selectRole" aria-label="" required>
+                                            <option selected>Choose a role</option>
+                                            <option value="teller">Teller</option>
+                                            <option value="manager">Manager</option>
+                                        </select>
                                     </div>
                                     <button type="submit" class="btn btn-primary btn-user btn-block" id="btnCreate"  data-toggle="modal" data-target="#modalSubscriptionForm">
                                         Create Account
@@ -253,7 +271,7 @@ if (!($_SESSION['role'] == "manager")) {
                                     <!-- <button type="submit" class="btn btn-primary btn-user btn-block" id="btnSend" disabled>
                                         Send
                                     </button> -->
-                                <!-- </form> -->
+                                </form>
                             </div>
                         </div>
                     </div>

@@ -379,9 +379,9 @@ $enc_user = $aes->encrypt($_SESSION['username']);
             } else {
                 $("#btnSend").prop('disabled', true);
             }
-            console.log(accdone);
-            console.log(amountdone);
-            console.log("---------");
+            // console.log(accdone);
+            // console.log(amountdone);
+            // console.log("---------");
         }
 
         $('#btnPassword').on('click', function(){
