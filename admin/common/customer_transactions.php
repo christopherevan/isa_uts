@@ -401,9 +401,10 @@ $dispRole = "<strong>$roleName</strong>";
             } else {
                 $("#btnSend").prop('disabled', true);
             }
-            // console.log(accdone);
-            // console.log(amountdone);
-            // console.log("---------");
+            console.log(accdoneFrom);
+            console.log(accdoneTo);
+            console.log(amountdone);
+            console.log("---------");
         }
 
         $('#btnPassword').on('click', function(){
@@ -444,10 +445,24 @@ $dispRole = "<strong>$roleName</strong>";
                 $.post('../../cek_account.php',
                     {'acc_id' : num},
                     function(data) {
+                        if (data == 'false') {
+                            $("#alertAccTo").html("<div class='alert alert-danger my-3' role='alert'>Destination account number not found!</div>");
+                            accdoneTo = false;
+                            cekFields();
+                        }else if(data=='same'){
+                            $("#alertAccTo").html("<div class='alert alert-danger my-3' role='alert'>You can't transfer to your own account!</div>");
+                            accdoneTo = false;
+                            cekFields();
+                        } else {
+                            $("#alertAccTo").html("<div class='alert alert-success my-3' role='alert'> Destination account found: " + data + "</div>");
+                            accdoneTo = true;
+                            cekFields();
+                        }
+
                         if ((myLength == 16 && otherLength==16)){
                             if (num==numFrom){
                                 $("#alertAccTo").html("<div class='alert alert-danger my-3' role='alert'>You can't transfer to your own account!</div>");
-                                accdoneFrom = false;
+                                accdoneTo = false;
                                 cekFields();
                             }else{
                                 $.post('../../cek_account.php',
@@ -470,20 +485,6 @@ $dispRole = "<strong>$roleName</strong>";
                                 );
                             }
                             
-                        }
-
-                        if (data == 'false') {
-                            $("#alertAccTo").html("<div class='alert alert-danger my-3' role='alert'>Destination account number not found!</div>");
-                            accdoneTo = false;
-                            cekFields();
-                        }else if(data=='same'){
-                            $("#alertAccTo").html("<div class='alert alert-danger my-3' role='alert'>You can't transfer to your own account!</div>");
-                            accdoneTo = false;
-                            cekFields();
-                        } else {
-                            $("#alertAccTo").html("<div class='alert alert-success my-3' role='alert'> Destination account found: " + data + "</div>");
-                            accdoneTo = true;
-                            cekFields();
                         }
                     }
                 );
@@ -508,6 +509,20 @@ $dispRole = "<strong>$roleName</strong>";
                 $.post('../../cek_account.php',
                     {'acc_id' : num,},
                     function(data) {
+                        if (data == 'false') {
+                            $("#alertAccFrom").html("<div class='alert alert-danger my-3' role='alert'>Destination account number not found!</div>");
+                            accdoneFrom = false;
+                            cekFields();
+                        }else if(data=='same'){
+                            $("#alertAccFrom").html("<div class='alert alert-danger my-3' role='alert'>You can't transfer to your own account!</div>");
+                            accdoneFrom = false;
+                            cekFields();
+                        } else {
+                            $("#alertAccFrom").html("<div class='alert alert-success my-3' role='alert'> Destination account found: " + data + "</div>");
+                            accdoneFrom = true;
+                            cekFields();
+                        }
+
                         if ((myLength == 16 && otherLength==16)){
                             if(num==numTo){
                                 $("#alertAccFrom").html("<div class='alert alert-danger my-3' role='alert'>You can't transfer to your own account!</div>");
@@ -535,20 +550,6 @@ $dispRole = "<strong>$roleName</strong>";
                             }
                             
                         }
-
-                        if (data == 'false') {
-                            $("#alertAccFrom").html("<div class='alert alert-danger my-3' role='alert'>Destination account number not found!</div>");
-                            accdoneFrom = false;
-                            cekFields();
-                        }else if(data=='same'){
-                            $("#alertAccFrom").html("<div class='alert alert-danger my-3' role='alert'>You can't transfer to your own account!</div>");
-                            accdoneFrom = false;
-                            cekFields();
-                        } else {
-                            $("#alertAccFrom").html("<div class='alert alert-success my-3' role='alert'> Destination account found: " + data + "</div>");
-                            accdoneFrom = true;
-                            cekFields();
-                        }
                     }
                 );
             } 
@@ -561,6 +562,19 @@ $dispRole = "<strong>$roleName</strong>";
             //     accdone = false;
             //     cekFields();
             // }
+        });
+
+        $('#moneyAmount').on('keyup', function(){
+            var myVal = $("#moneyAmount").val();
+            if (myVal >0) {
+                amountdone = true;
+                cekFields();
+            } 
+            else{
+                amountdone=false;
+                cekFields();
+            }
+
         });
     </script>
 </body>
